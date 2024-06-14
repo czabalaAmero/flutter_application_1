@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'components/custom_text_field.dart';
+import 'components/custom_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,9 +32,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _formKey = GlobalKey<FormState>();
   int _counter = 0;
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _controller2 = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _textController = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
@@ -40,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _decrementCounter(){
+  void _decrementCounter() {
     setState(() {
       _counter--;
     });
@@ -66,6 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _submitForm() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _showAlertDialog(
+          'Entered email: ${_emailController.text}\nEntered text: ${_textController.text}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,49 +84,34 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  labelText: 'Enter your text',
-                  border: OutlineInputBorder(),
-                ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _showAlertDialog('Entered text: ${_controller.text}');
-              },
-              child: const Text('Submit'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _controller2,
-                decoration: const InputDecoration(
-                  labelText: 'Enter your text',
-                  border: OutlineInputBorder(),
-                ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _showAlertDialog('Entered text: ${_controller2.text}');
-              },
-              child: const Text('Submit'),
-            ),
-          ],
+              CustomTextField(
+                controller: _emailController,
+                labelText: 'Enter your email',
+                type: TextFieldType.email,
+              ),
+              CustomTextField(
+                controller: _textController,
+                labelText: 'Enter your text',
+                type: TextFieldType.text,
+              ),
+             CustomButton(
+                buttonText: 'Submit',
+                onPressed: _submitForm,
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: Stack(
