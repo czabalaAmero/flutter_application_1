@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'components/custom_text_field.dart';
 import 'components/custom_button.dart';
+import 'components/listView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -76,64 +77,74 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      title: Text(widget.title),
+    ),
+    body: Column(
+      children: <Widget>[
+        Expanded(
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'You have pushed the button this many times:',
+                  ),
+                  Text(
+                    '$_counter',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  CustomTextField(
+                    controller: _emailController,
+                    labelText: 'Enter your email',
+                    type: TextFieldType.email,
+                  ),
+                  CustomTextField(
+                    controller: _textController,
+                    labelText: 'Enter your text',
+                    type: TextFieldType.text,
+                  ),
+                  CustomButton(
+                    buttonText: 'Submit',
+                    onPressed: _submitForm,
+                  ),
+                ],
               ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              CustomTextField(
-                controller: _emailController,
-                labelText: 'Enter your email',
-                type: TextFieldType.email,
-              ),
-              CustomTextField(
-                controller: _textController,
-                labelText: 'Enter your text',
-                type: TextFieldType.text,
-              ),
-             CustomButton(
-                buttonText: 'Submit',
-                onPressed: _submitForm,
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              onPressed: _incrementCounter,
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
+        Expanded(
+          child:ListViews()
+        ),
+        
+      ],
+    ),
+    floatingActionButton: Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: FloatingActionButton(
-              onPressed: _decrementCounter,
-              tooltip: 'Decrement',
-              child: const Icon(Icons.remove),
-            ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: FloatingActionButton(
+            onPressed: _decrementCounter,
+            tooltip: 'Decrement',
+            child: const Icon(Icons.remove),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 }
