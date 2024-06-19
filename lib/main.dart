@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'components/custom_text_field.dart';
-import 'components/custom_button.dart';
-import 'components/listView.dart';
+import 'pages/home_page.dart';
+import 'pages/about_page.dart';
+import 'pages/settings_page.dart';
+import 'pages/login_page.dart';  // Asegúrate de importar la página de inicio de sesión
 
 void main() {
   runApp(const MyApp());
@@ -18,11 +19,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const LoginPage(),  // Cambia esto a la página de inicio de sesión
     );
   }
 }
 
+// El resto de las clases permanecen iguales
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -33,118 +35,49 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _formKey = GlobalKey<FormState>();
-  int _counter = 0;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _textController = TextEditingController();
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  final List<Widget> _pages = [
+    const HomePage(),
+    const AboutPage(),
+    const SettingsPage(),
+  ];
+
+
+  void _onItemTapped(int index) {
     setState(() {
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-
-  void _showAlertDialog(String text) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Entered Text'),
-          content: Text(text),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info),
+            label: 'About',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.deepPurple,
+        onTap: _onItemTapped,
+      ),
+      
     );
   }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      _showAlertDialog(
-          'Entered email: ${_emailController.text}\nEntered text: ${_textController.text}');
-    }
-  }
-
- @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: Text(widget.title),
-    ),
-    body: Column(
-      children: <Widget>[
-        Expanded(
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text(
-                    'You have pushed the button this many times:',
-                  ),
-                  Text(
-                    '$_counter',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  CustomTextField(
-                    controller: _emailController,
-                    labelText: 'Enter your email',
-                    type: TextFieldType.email,
-                  ),
-                  CustomTextField(
-                    controller: _textController,
-                    labelText: 'Enter your text',
-                    type: TextFieldType.text,
-                  ),
-                  CustomButton(
-                    buttonText: 'Submit',
-                    onPressed: _submitForm,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child:ListViews()
-        ),
-        
-      ],
-    ),
-    floatingActionButton: Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.bottomRight,
-          child: FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: _decrementCounter,
-            tooltip: 'Decrement',
-            child: const Icon(Icons.remove),
-          ),
-        ),
-      ],
-    ),
-  );
-}
 }
