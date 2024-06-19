@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               CustomTextField(
                 controller: _passwordController,
                 labelText: 'Enter your password',
-                type: TextFieldType.text,
+                type: TextFieldType.password,
               ),
               CustomButton(
                 buttonText: 'Login',

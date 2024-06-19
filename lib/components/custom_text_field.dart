@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum TextFieldType { text, email }
+enum TextFieldType { text, email, password }
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -38,7 +38,10 @@ class CustomTextField extends StatelessWidget {
           border: const OutlineInputBorder(),
         ),
         validator: _validate,
-        keyboardType: type == TextFieldType.email ? TextInputType.emailAddress : TextInputType.text,
+        keyboardType: type == TextFieldType.email 
+            ? TextInputType.emailAddress 
+            : TextInputType.text,
+        obscureText: type == TextFieldType.password,
       ),
     );
   }
